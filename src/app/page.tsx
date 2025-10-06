@@ -1,102 +1,229 @@
-import Image from "next/image";
+'use client';
+
+import React from 'react';
+import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
+import { Navigation } from '@/components/Navigation';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { 
+  BookOpen, 
+  Search, 
+  Share2, 
+  Users, 
+  Zap, 
+  Shield,
+  ArrowRight,
+  Star,
+  TrendingUp,
+  Clock
+} from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const { user } = useAuth();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const features = [
+    {
+      icon: BookOpen,
+      title: "Organize Notes",
+      description: "Upload and organize your academic notes with smart tagging and categorization."
+    },
+    {
+      icon: Search,
+      title: "Smart Search",
+      description: "Find exactly what you're looking for with powerful search across content, tags, and authors."
+    },
+    {
+      icon: Share2,
+      title: "Easy Sharing",
+      description: "Share your notes with classmates or make them public for the community to benefit."
+    },
+    {
+      icon: Users,
+      title: "Collaborative Learning",
+      description: "Discover notes from other students and contribute to the collective knowledge."
+    },
+    {
+      icon: Zap,
+      title: "AI-Powered",
+      description: "Get summaries, flashcards, and insights powered by AI to enhance your learning."
+    },
+    {
+      icon: Shield,
+      title: "Secure & Private",
+      description: "Your notes are secure with Firebase authentication and granular privacy controls."
+    }
+  ];
+
+  const stats = [
+    { icon: BookOpen, value: "10K+", label: "Notes Shared" },
+    { icon: Users, value: "5K+", label: "Active Students" },
+    { icon: Star, value: "4.9", label: "User Rating" },
+    { icon: TrendingUp, value: "95%", label: "Success Rate" }
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <Navigation />
+      
+      {/* Hero Section */}
+      <section className="container mx-auto px-4 py-20">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center max-w-4xl mx-auto"
+        >
+          <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-primary via-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
+            OpenNote
+          </h1>
+          <p className="text-xl md:text-2xl text-muted-foreground mb-8 leading-relaxed">
+            The modern platform for students to upload, organize, and share academic notes in a distraction-free environment.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            {user ? (
+              <Button asChild size="lg" className="text-lg px-8 py-6">
+                <Link href="/dashboard">
+                  Go to Dashboard
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+            ) : (
+              <Button asChild size="lg" className="text-lg px-8 py-6">
+                <Link href="/auth/login">
+                  Get Started Free
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+            )}
+            <Button variant="outline" size="lg" className="text-lg px-8 py-6">
+              View Public Notes
+            </Button>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto">
+            {stats.map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="text-center"
+              >
+                <stat.icon className="h-8 w-8 mx-auto mb-2 text-primary" />
+                <div className="text-2xl font-bold">{stat.value}</div>
+                <div className="text-sm text-muted-foreground">{stat.label}</div>
+              </motion.div>
+            ))}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        </motion.div>
+      </section>
+
+      {/* Features Section */}
+      <section className="container mx-auto px-4 py-20">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <h2 className="text-4xl font-bold mb-4">Everything you need for academic success</h2>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            OpenNote provides all the tools you need to organize, share, and discover academic content.
+          </p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((feature, index) => (
+            <motion.div
+              key={feature.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+            >
+              <Card className="h-full hover:shadow-lg transition-shadow">
+                <CardContent className="p-6">
+                  <feature.icon className="h-12 w-12 text-primary mb-4" />
+                  <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                  <p className="text-muted-foreground">{feature.description}</p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="container mx-auto px-4 py-20">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center bg-gradient-to-r from-primary/10 via-blue-500/10 to-purple-500/10 rounded-2xl p-12"
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+          <h2 className="text-4xl font-bold mb-4">Ready to transform your note-taking?</h2>
+          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            Join thousands of students who are already using OpenNote to organize and share their academic knowledge.
+          </p>
+          {!user && (
+            <Button size="lg" className="text-lg px-8 py-6" asChild>
+              <Link href="/auth/login">
+                Start Your Journey
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+          )}
+        </motion.div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t bg-muted/50">
+        <div className="container mx-auto px-4 py-12">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <BookOpen className="h-6 w-6 text-primary" />
+                <span className="text-lg font-bold">OpenNote</span>
+              </div>
+              <p className="text-muted-foreground">
+                The modern platform for academic note-sharing and collaboration.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-4">Product</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li><Link href="/features" className="hover:text-foreground">Features</Link></li>
+                <li><Link href="/pricing" className="hover:text-foreground">Pricing</Link></li>
+                <li><Link href="/security" className="hover:text-foreground">Security</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-4">Community</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li><Link href="/blog" className="hover:text-foreground">Blog</Link></li>
+                <li><Link href="/support" className="hover:text-foreground">Support</Link></li>
+                <li><Link href="/discord" className="hover:text-foreground">Discord</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-4">Legal</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li><Link href="/privacy" className="hover:text-foreground">Privacy</Link></li>
+                <li><Link href="/terms" className="hover:text-foreground">Terms</Link></li>
+                <li><Link href="/cookies" className="hover:text-foreground">Cookies</Link></li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t mt-8 pt-8 text-center text-muted-foreground">
+            <p>&copy; 2024 OpenNote. All rights reserved.</p>
+          </div>
+        </div>
       </footer>
     </div>
   );
