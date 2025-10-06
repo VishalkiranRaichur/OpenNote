@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { Note } from '@/types';
 
 export default function DashboardPage() {
   const { user } = useUser();
