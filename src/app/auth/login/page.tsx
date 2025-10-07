@@ -24,9 +24,12 @@ export default function LoginPage() {
       await signInWithGoogle();
       toast.success('Successfully signed in!');
       router.push('/dashboard');
-    } catch (error) {
-      toast.error('Failed to sign in. Please try again.');
-      console.error('Sign in error:', error);
+    } catch (error: any) {
+      // Only show error if it's not a user cancellation
+      if (error.code !== 'auth/popup-closed-by-user') {
+        toast.error('Failed to sign in. Please try again.');
+        console.error('Sign in error:', error);
+      }
     }
   };
 

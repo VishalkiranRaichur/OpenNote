@@ -115,13 +115,16 @@ export const useUser = () => {
       await signInWithPopup(auth, provider);
       toast.success('Successfully signed in!');
     } catch (error: any) {
-      console.error('Error signing in with Google:', error);
       if (error.code === 'auth/popup-closed-by-user') {
-        toast.error('Sign-in cancelled');
+        // User closed the popup - this is normal behavior, don't show as error
+        console.log('User cancelled Google sign-in');
+        toast.info('Sign-in cancelled');
+        return; // Don't throw error for user cancellation
       } else {
+        console.error('Error signing in with Google:', error);
         toast.error('Failed to sign in. Please try again.');
+        throw error;
       }
-      throw error;
     } finally {
       setLoading(false);
     }
