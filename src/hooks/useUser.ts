@@ -20,6 +20,11 @@ export const useUser = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!auth || !db) {
+      setLoading(false);
+      return;
+    }
+    
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setFirebaseUser(firebaseUser);
       
@@ -98,6 +103,9 @@ export const useUser = () => {
   }, [auth, db]);
 
   const signInWithGoogle = async () => {
+    if (!auth) {
+      throw new Error('Firebase Auth not initialized');
+    }
     try {
       setLoading(true);
       const provider = new GoogleAuthProvider();
@@ -120,6 +128,9 @@ export const useUser = () => {
   };
 
   const logout = async () => {
+    if (!auth) {
+      throw new Error('Firebase Auth not initialized');
+    }
     try {
       await signOut(auth);
       toast.success('Successfully signed out');
