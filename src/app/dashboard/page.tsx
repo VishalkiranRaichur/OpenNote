@@ -26,14 +26,12 @@ export default function DashboardPage() {
   const { user } = useUser();
   const { notes: userNotes, loading: userNotesLoading } = useNotes({
     authorId: user?.id,
-    orderByField: 'createdAt',
-    orderByDirection: 'desc',
+    orderBy: 'recent',
     limit: 5,
   });
   const { notes: publicNotes, loading: publicNotesLoading } = useNotes({
     isPublic: true,
-    orderByField: 'viewCount',
-    orderByDirection: 'desc',
+    orderBy: 'popular',
     limit: 5,
   });
 
