@@ -92,6 +92,9 @@ export const useNotes = (filters?: {
   }, [db, filters]);
 
   const createNote = async (noteData: Omit<Note, 'id' | 'createdAt' | 'updatedAt' | 'viewCount' | 'likeCount'>) => {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
     try {
       const docRef = await addDoc(collection(db, 'notes'), {
         ...noteData,
@@ -111,6 +114,9 @@ export const useNotes = (filters?: {
   };
 
   const updateNote = async (noteId: string, updates: Partial<Note>) => {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
     try {
       const noteRef = doc(db, 'notes', noteId);
       await updateDoc(noteRef, {
@@ -127,6 +133,9 @@ export const useNotes = (filters?: {
   };
 
   const deleteNote = async (noteId: string) => {
+    if (!db) {
+      throw new Error('Firebase not initialized');
+    }
     try {
       const noteRef = doc(db, 'notes', noteId);
       await deleteDoc(noteRef);
@@ -140,6 +149,9 @@ export const useNotes = (filters?: {
   };
 
   const uploadFile = async (file: File, path: string) => {
+    if (!storage) {
+      throw new Error('Firebase Storage not initialized');
+    }
     try {
       const storageRef = ref(storage, path);
       const snapshot = await uploadBytes(storageRef, file);
@@ -152,6 +164,9 @@ export const useNotes = (filters?: {
   };
 
   const deleteFile = async (path: string) => {
+    if (!storage) {
+      throw new Error('Firebase Storage not initialized');
+    }
     try {
       const storageRef = ref(storage, path);
       await deleteObject(storageRef);
