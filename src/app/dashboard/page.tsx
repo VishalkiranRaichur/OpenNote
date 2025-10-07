@@ -24,41 +24,20 @@ import { Note } from '@/types';
 
 export default function DashboardPage() {
   const { user } = useUser();
-  const [recentNotes, setRecentNotes] = useState<Note[]>([]);
-  const [popularNotes, setPopularNotes] = useState<Note[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { notes: userNotes, loading: userNotesLoading } = useNotes({
+    authorId: user?.id,
+    orderByField: 'createdAt',
+    orderByDirection: 'desc',
+    limit: 5,
+  });
+  const { notes: publicNotes, loading: publicNotesLoading } = useNotes({
+    isPublic: true,
+    orderByField: 'viewCount',
+    orderByDirection: 'desc',
+    limit: 5,
+  });
 
-  useEffect(() => {
-    if (user) {
-      fetchDashboardData();
-    }
-  }, [user]);
-
-  const fetchDashboardData = async () => {
-    try {
-      setLoading(true);
-      
-      // Fetch user's recent notes
-      const userNotes = await getNotes({ 
-        authorId: user?.id, 
-        limit: 5,
-        orderBy: 'recent' 
-      });
-      setRecentNotes(userNotes);
-
-      // Fetch popular public notes
-      const popular = await getNotes({ 
-        isPublic: true, 
-        limit: 5,
-        orderBy: 'popular' 
-      });
-      setPopularNotes(popular);
-    } catch (error) {
-      console.error('Error fetching dashboard data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const loading = userNotesLoading || publicNotesLoading;
 
   const getFileIcon = (type: string) => {
     switch (type) {
@@ -73,10 +52,10 @@ export default function DashboardPage() {
   };
 
   const stats = [
-    { label: 'Total Notes', value: recentNotes.length, icon: BookOpen },
-    { label: 'Public Notes', value: recentNotes.filter(n => n.isPublic).length, icon: TrendingUp },
-    { label: 'Total Views', value: recentNotes.reduce((sum, n) => sum + n.viewCount, 0), icon: Eye },
-    { label: 'Total Likes', value: recentNotes.reduce((sum, n) => sum + n.likeCount, 0), icon: Heart },
+    { label: 'Total Notes', value: userNotes.length, icon: BookOpen },
+    { label: 'Public Notes', value: userNotes.filter(n => n.isPublic).length, icon: TrendingUp },
+    { label: 'Total Views', value: userNotes.reduce((sum, n) => sum + n.viewCount, 0), icon: Eye },
+    { label: 'Total Likes', value: userNotes.reduce((sum, n) => sum + n.likeCount, 0), icon: Heart },
   ];
 
   if (loading) {
@@ -186,9 +165,9 @@ export default function DashboardPage() {
               </Button>
             </CardHeader>
             <CardContent>
-              {recentNotes.length > 0 ? (
+              {userNotes.length > 0 ? (
                 <div className="space-y-4">
-                  {recentNotes.map((note) => {
+                  {userNotes.map((note) => {
                     const FileIcon = getFileIcon(note.type);
                     return (
                       <div key={note.id} className="flex items-center space-x-4 p-4 border rounded-lg hover:bg-muted/50 transition-colors">
@@ -244,9 +223,9 @@ export default function DashboardPage() {
               </Button>
             </CardHeader>
             <CardContent>
-              {popularNotes.length > 0 ? (
+              {publicNotes.length > 0 ? (
                 <div className="space-y-4">
-                  {popularNotes.map((note) => {
+                  {publicNotes.map((note) => {
                     const FileIcon = getFileIcon(note.type);
                     return (
                       <div key={note.id} className="flex items-center space-x-4 p-4 border rounded-lg hover:bg-muted/50 transition-colors">
