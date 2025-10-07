@@ -43,6 +43,13 @@ export const FirebaseClientProvider: React.FC<{ children: React.ReactNode }> = (
   useEffect(() => {
     const initializeFirebase = () => {
       try {
+        // Check if Firebase config is valid
+        if (!firebaseConfig.apiKey || firebaseConfig.apiKey === 'your_firebase_api_key_here') {
+          console.warn('Firebase configuration not found. Please add your Firebase credentials to .env.local');
+          setIsInitialized(true); // Still initialize but with warning
+          return;
+        }
+
         // Initialize Firebase app
         let firebaseApp: FirebaseApp;
         if (getApps().length === 0) {
@@ -88,12 +95,17 @@ export const FirebaseClientProvider: React.FC<{ children: React.ReactNode }> = (
     initializeFirebase();
   }, []);
 
-  if (!isInitialized || !app || !auth || !db || !storage) {
+  if (!isInitialized) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
+  }
+
+  // If Firebase is not properly configured, show a warning but still render the app
+  if (!app || !auth || !db || !storage) {
+    console.warn('Firebase services not available. Some features may not work.');
   }
 
   const value: FirebaseContextType = {
