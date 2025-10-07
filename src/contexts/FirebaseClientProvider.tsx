@@ -16,10 +16,10 @@ const firebaseConfig = {
 };
 
 interface FirebaseContextType {
-  app: FirebaseApp;
-  auth: ReturnType<typeof getAuth>;
-  db: ReturnType<typeof getFirestore>;
-  storage: ReturnType<typeof getStorage>;
+  app: FirebaseApp | null;
+  auth: ReturnType<typeof getAuth> | null;
+  db: ReturnType<typeof getFirestore> | null;
+  storage: ReturnType<typeof getStorage> | null;
   isInitialized: boolean;
 }
 
