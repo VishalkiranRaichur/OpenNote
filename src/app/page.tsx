@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { useAuth } from '@/contexts/AuthContext';
+import { useUser } from '@/hooks/useUser';
 import { Navigation } from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -21,7 +21,7 @@ import {
 import { motion } from 'framer-motion';
 
 export default function Home() {
-  const { user } = useAuth();
+  const { user } = useUser();
 
   const features = [
     {
