@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { useUser } from '@/hooks/useUser';
 import { Navigation } from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -21,7 +20,6 @@ import {
 import { motion } from 'framer-motion';
 
 export default function Home() {
-  const { user } = useUser();
 
   const features = [
     {
@@ -83,23 +81,14 @@ export default function Home() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            {user ? (
-              <Button asChild size="lg" className="text-lg px-8 py-6">
-                <Link href="/dashboard">
-                  Go to Dashboard
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-            ) : (
-              <Button asChild size="lg" className="text-lg px-8 py-6">
-                <Link href="/auth/login">
-                  Get Started Free
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-            )}
-            <Button variant="outline" size="lg" className="text-lg px-8 py-6">
-              View Public Notes
+            <Button asChild size="lg" className="text-lg px-8 py-6">
+              <Link href="/dashboard/public">
+                Browse Public Notes
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="text-lg px-8 py-6">
+              <Link href="/dashboard/discover">Discover</Link>
             </Button>
           </div>
 
@@ -171,14 +160,12 @@ export default function Home() {
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Join thousands of students who are already using OpenNote to organize and share their academic knowledge.
           </p>
-          {!user && (
-            <Button size="lg" className="text-lg px-8 py-6" asChild>
-              <Link href="/auth/login">
-                Start Your Journey
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-          )}
+          <Button size="lg" className="text-lg px-8 py-6" asChild>
+            <Link href="/dashboard/public">
+              Start Browsing
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+          </Button>
         </motion.div>
       </section>
 
